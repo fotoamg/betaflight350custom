@@ -93,6 +93,7 @@ typedef struct {
     rescueSensorData_s sensor;
     rescueIntent_s intent;
     bool isFailsafe;
+    uint16_t resAltInit;
 } rescueState_s;
 
 extern int32_t gpsRescueAngle[ANGLE_INDEX_COUNT]; //NOTE: ANGLES ARE IN CENTIDEGREES

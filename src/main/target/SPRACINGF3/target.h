@@ -51,7 +51,11 @@
 //#undef USE_TELEMETRY_LTM
 //#undef USE_SERIALRX_XBUS
 //#undef USE_SERIALRX_SUMH
-//#undef USE_PWM
+#define USE_PWM
+#define USE_GPS
+#define USE_GPS_NMEA
+#define USE_GPS_UBLOX
+#define USE_GPS_RESCUE
 
 #undef USE_BOARD_INFO
 #undef USE_EXTENDED_CMS_MENUS
@@ -59,23 +63,9 @@
 #undef USE_RX_MSP
 #undef USE_ESC_SENSOR_INFO
 
-#if defined(IRCSYNERGYF3)
 #undef USE_LED_STRIP
-#endif
 
-#if defined(ZCOREF3)
 
-#define LED0_PIN                PB8
-#else
-
-#define LED0_PIN                PB3
-#endif
-
-#if !defined(IRCSYNERGYF3)
-#define USE_BEEPER
-#define BEEPER_PIN              PC15
-#define BEEPER_INVERTED
-#endif
 
 #define USE_EXTI
 #define MPU_INT_EXTI            PC13
@@ -86,8 +76,8 @@
 
 #define USE_ACC
 
-#define USE_BARO
-#define USE_BARO_BMP280
+//#define USE_BARO
+//#define USE_BARO_BMP280
 
 #if defined(FLIP32F3OSD)
 #define USE_GYRO_MPU6500
@@ -148,23 +138,23 @@
 
 #else //SPRACINGF3
 
-#define USE_RANGEFINDER
-#define USE_RANGEFINDER_HCSR04
-#define RANGEFINDER_HCSR04_TRIGGER_PIN       PB0
-#define RANGEFINDER_HCSR04_ECHO_PIN          PB1
+//#define USE_RANGEFINDER
+//#define USE_RANGEFINDER_HCSR04
+//#define RANGEFINDER_HCSR04_TRIGGER_PIN       PB0
+//#define RANGEFINDER_HCSR04_ECHO_PIN          PB1
 
-#define USE_BARO_MS5611
-#define USE_BARO_BMP085
+//#define USE_BARO_MS5611
+//#define USE_BARO_BMP085
 
-#define USE_MAG
-#define USE_MAG_AK8975
-#define USE_MAG_HMC5883
-#define USE_MAG_QMC5883
-#define MAG_HMC5883_ALIGN       CW270_DEG
+//#define USE_MAG
+//#define USE_MAG_AK8975
+//#define USE_MAG_HMC5883
+//#define USE_MAG_QMC5883
+//#define MAG_HMC5883_ALIGN       CW270_DEG
 
-#define USE_MAG_DATA_READY_SIGNAL
-#define ENSURE_MAG_DATA_READY_IS_HIGH
-#define MAG_INT_EXTI            PC14
+//#define USE_MAG_DATA_READY_SIGNAL
+//#define ENSURE_MAG_DATA_READY_IS_HIGH
+//#define MAG_INT_EXTI            PC14
 #endif
 
 #if !defined(IRCSYNERGYF3)
@@ -175,20 +165,12 @@
 #define USE_UART1
 #define USE_UART2
 #define USE_UART3
-#define USE_SOFTSERIAL1
-#define USE_SOFTSERIAL2
+//#define USE_SOFTSERIAL1
+//#define USE_SOFTSERIAL2
 
-#define SERIAL_PORT_COUNT       5
+#define SERIAL_PORT_COUNT       3
 
-#if !defined(ZCOREF3)
-#define SOFTSERIAL1_RX_PIN      PB4 // PWM 5
-#define SOFTSERIAL1_TX_PIN      PB5 // PWM 6
 
-#define SOFTSERIAL2_RX_PIN      PB0 // PWM 7
-#define SOFTSERIAL2_TX_PIN      PB1 // PWM 8
-
-#define RANGEFINDER_HCSR04_SOFTSERIAL2_EXCLUSIVE
-#endif
 
 #define USE_ESCSERIAL
 #define ESCSERIAL_TIMER_TX_PIN  PA0  // (HARDARE=0,PPM)
@@ -221,8 +203,8 @@
 #define CURRENT_METER_ADC_PIN   PA5
 #define RSSI_ADC_PIN            PB2
 
-#define USE_OSD
-#define USE_OSD_OVER_MSP_DISPLAYPORT
+//#define USE_OSD
+//#define USE_OSD_OVER_MSP_DISPLAYPORT
 #define USE_SLOW_MSP_DISPLAYPORT_RATE_WHEN_UNARMED
 #endif
 
@@ -252,3 +234,9 @@
 
 #define USABLE_TIMER_CHANNEL_COUNT 17
 #define USED_TIMERS             ( TIM_N(1) | TIM_N(2) | TIM_N(3) | TIM_N(4) | TIM_N(15) | TIM_N(16) | TIM_N(17) )
+
+#undef USE_VTX_COMMON
+#undef USE_VTX_CONTROL
+#undef USE_VTX_SMARTAUDIO
+#undef USE_VTX_TRAMP
+//#undef USE_DSHOT

@@ -22,6 +22,7 @@
 
 #undef USE_DSHOT_DMAR           // OMNIBUS (F3) does not benefit from burst Dshot
 
+
 // Removed to make the firmware fit into flash (in descending order of priority):
 #undef USE_GYRO_OVERFLOW_CHECK
 #undef USE_GYRO_LPF2
@@ -41,6 +42,10 @@
 #undef USE_SERIALRX_XBUS
 #undef USE_SERIALRX_SUMH
 #undef USE_PWM
+#define USE_GPS
+#define USE_GPS_NMEA
+#define USE_GPS_UBLOX
+#define USE_GPS_RESCUE
 
 #undef USE_BOARD_INFO
 #undef USE_EXTENDED_CMS_MENUS
@@ -90,10 +95,10 @@
 #define USE_UART1
 #define USE_UART2
 #define USE_UART3
-#define USE_SOFTSERIAL1
-#define USE_SOFTSERIAL2
+#undef USE_SOFTSERIAL1
+#undef USE_SOFTSERIAL2
 
-#define SERIAL_PORT_COUNT       6
+#define SERIAL_PORT_COUNT       4
 
 #define UART1_TX_PIN            PA9
 #define UART1_RX_PIN            PA10
@@ -142,6 +147,8 @@
 #define SPI2_MISO_PIN           PB14
 #define SPI2_MOSI_PIN           PB15
 
+// Performance logging for SD card operations:
+// #define AFATFS_USE_INTROSPECTIVE_LOGGING
 #define USE_SDCARD
 
 #define SDCARD_DETECT_INVERTED
@@ -159,9 +166,6 @@
 #ifndef USE_DSHOT
 #define SDCARD_DMA_CHANNEL_TX               DMA1_Channel5
 #endif
-
-// Performance logging for SD card operations:
-// #define AFATFS_USE_INTROSPECTIVE_LOGGING
 
 #define USE_ADC
 #define DEFAULT_VOLTAGE_METER_SOURCE VOLTAGE_METER_ADC
@@ -197,3 +201,8 @@
 
 #define USABLE_TIMER_CHANNEL_COUNT 8 // PPM + 6 Outputs (2 shared with UART3)
 #define USED_TIMERS             (TIM_N(1) | TIM_N(2) | TIM_N(3) | TIM_N(4) | TIM_N(8) | TIM_N(15))
+#undef USE_VTX_COMMON
+#undef USE_VTX_CONTROL
+#undef USE_VTX_SMARTAUDIO
+#undef USE_VTX_TRAMP
+#undef USE_DSHOT 

@@ -78,6 +78,7 @@ PG_RESET_TEMPLATE(gpsRescueConfig_t, gpsRescueConfig,
 static uint16_t rescueThrottle;
 static float    rescueYaw;
 
+
 int32_t       gpsRescueAngle[ANGLE_INDEX_COUNT] = { 0, 0 };
 uint16_t      hoverThrottle = 0;
 float         averageThrottle = 0.0;
@@ -104,6 +105,8 @@ void rescueNewGpsData(void)
 */
 void updateGPSRescueState(void)
 {
+    
+    
     if (!FLIGHT_MODE(GPS_RESCUE_MODE)) {
         rescueStop();
     } else if (FLIGHT_MODE(GPS_RESCUE_MODE) && rescueState.phase == RESCUE_IDLE) {
@@ -122,6 +125,10 @@ void updateGPSRescueState(void)
         if (hoverThrottle == 0) { //no actual throttle data yet, let's use the default.
             hoverThrottle = gpsRescueConfig()->throttleHover;
         }
+		rescueState.resAltInit = gpsRescueConfig()->initialAltitude * 100;
+		if (rescueState.resAltInit < rescueState.sensor.currentAltitude) {
+		     rescueState.resAltInit = rescueState.sensor.currentAltitude + 500;
+		}
 
         // Minimum distance detection (100m).  Disarm regardless of sanity check configuration.  Rescue too close is never a good idea.
         if (rescueState.sensor.distanceToHome < 100) {
@@ -139,16 +146,18 @@ void updateGPSRescueState(void)
         rescueState.phase = RESCUE_ATTAIN_ALT;
         FALLTHROUGH;
     case RESCUE_ATTAIN_ALT:
-        // Get to a safe altitude at a low velocity ASAP
+	    rescueState.intent.targetAltitude = rescueState.resAltInit;
+		        // Get to a safe altitude at a low velocity ASAP
         if (ABS(rescueState.intent.targetAltitude - rescueState.sensor.currentAltitude) < 1000) {
             rescueState.phase = RESCUE_CROSSTRACK;
         }
 
         rescueState.intent.targetGroundspeed = 500;
-        rescueState.intent.targetAltitude = MAX(gpsRescueConfig()->initialAltitude * 100, rescueState.sensor.maxAltitude + 1500);
+        //rescueState.intent.targetAltitude = rescueState.resAltInit;
         rescueState.intent.crosstrack = true;
         rescueState.intent.minAngleDeg = 10;
         rescueState.intent.maxAngleDeg = 15;
+
         break;
     case RESCUE_CROSSTRACK:
         if (rescueState.sensor.distanceToHome < gpsRescueConfig()->descentDistance) {
@@ -158,7 +167,7 @@ void updateGPSRescueState(void)
         // We can assume at this point that we are at or above our RTH height, so we need to try and point to home and tilt while maintaining alt
         // Is our altitude way off?  We should probably kick back to phase RESCUE_ATTAIN_ALT
         rescueState.intent.targetGroundspeed = gpsRescueConfig()->rescueGroundspeed;
-        rescueState.intent.targetAltitude = MAX(gpsRescueConfig()->initialAltitude * 100, rescueState.sensor.maxAltitude + 1500);
+        rescueState.intent.targetAltitude = gpsRescueConfig()->initialAltitude * 100;
         rescueState.intent.crosstrack = true;
         rescueState.intent.minAngleDeg = 15;
         rescueState.intent.maxAngleDeg = gpsRescueConfig()->angle;
@@ -173,7 +182,7 @@ void updateGPSRescueState(void)
         int32_t newAlt = gpsRescueConfig()->initialAltitude * 100  * rescueState.sensor.distanceToHome / gpsRescueConfig()->descentDistance;
         int32_t newSpeed = gpsRescueConfig()->rescueGroundspeed * rescueState.sensor.distanceToHome / gpsRescueConfig()->descentDistance;
 
-        rescueState.intent.targetAltitude = constrain(newAlt, 100, rescueState.intent.targetAltitude);
+        rescueState.intent.targetAltitude = constrain(newAlt, 300, rescueState.intent.targetAltitude);
         rescueState.intent.targetGroundspeed = constrain(newSpeed, 100, rescueState.intent.targetGroundspeed);
         rescueState.intent.crosstrack = true;
         rescueState.intent.minAngleDeg = 10;
@@ -191,7 +200,7 @@ void updateGPSRescueState(void)
         }
 
         rescueState.intent.targetGroundspeed = 0;
-        rescueState.intent.targetAltitude = 0;
+        rescueState.intent.targetAltitude = 200;
         rescueState.intent.crosstrack = true;
         rescueState.intent.minAngleDeg = 0;
         rescueState.intent.maxAngleDeg = 15;
