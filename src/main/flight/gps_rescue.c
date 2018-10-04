@@ -125,13 +125,22 @@ void updateGPSRescueState(void)
         if (hoverThrottle == 0) { //no actual throttle data yet, let's use the default.
             hoverThrottle = gpsRescueConfig()->throttleHover;
         }
+		
+		// Calculationg safe altitudes for AA and CT  phases and not using max altitude
 		rescueState.resAltInit = gpsRescueConfig()->initialAltitude * 100;
-		if (rescueState.resAltInit < rescueState.sensor.currentAltitude) {
-		     rescueState.resAltInit = rescueState.sensor.currentAltitude + 500;
+		if (rescueState.resAltInit < rescueState.sensor.currentAltitude + 1000) {
+		     rescueState.resAltInit = rescueState.sensor.currentAltitude + 1000;
+		}
+		rescueState.resAltCross = rescueState.resAltInit;
+		if (rescueState.resAltCross > 12000) {
+			rescueState.resAltCross = 12000;
+		} else {
+		    if ((gpsRescueConfig()->initialAltitude * 100) < (rescueState.sensor.currentAltitude + 1000))
+		    rescueState.resAltCross = (gpsRescueConfig()->initialAltitude * 100) + ((rescueState.sensor.currentAltitude + 1000) - (gpsRescueConfig()->initialAltitude * 100)) / 2;
 		}
 
         // Minimum distance detection (100m).  Disarm regardless of sanity check configuration.  Rescue too close is never a good idea.
-        if (rescueState.sensor.distanceToHome < 100) {
+        if (rescueState.sensor.distanceToHome < 20) {
             // Never allow rescue mode to engage as a failsafe within 100 meters or when disarmed.
             if (rescueState.isFailsafe || !ARMING_FLAG(ARMED)) {
                 rescueState.failure = RESCUE_TOO_CLOSE;
@@ -167,7 +176,7 @@ void updateGPSRescueState(void)
         // We can assume at this point that we are at or above our RTH height, so we need to try and point to home and tilt while maintaining alt
         // Is our altitude way off?  We should probably kick back to phase RESCUE_ATTAIN_ALT
         rescueState.intent.targetGroundspeed = gpsRescueConfig()->rescueGroundspeed;
-        rescueState.intent.targetAltitude = gpsRescueConfig()->initialAltitude * 100;
+        rescueState.intent.targetAltitude = rescueState.resAltCross;
         rescueState.intent.crosstrack = true;
         rescueState.intent.minAngleDeg = 15;
         rescueState.intent.maxAngleDeg = gpsRescueConfig()->angle;

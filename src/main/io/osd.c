@@ -895,7 +895,13 @@ static bool osdDrawSingleElement(uint8_t item)
 
             // Visual beeper
             if (osdWarnGetState(OSD_WARNING_VISUAL_BEEPER) && showVisualBeeper) {
-                osdFormatMessage(buff, OSD_FORMAT_MESSAGE_BUFFER_SIZE, "  * * * *");
+			    if (FLIGHT_MODE(GPS_RESCUE_MODE)) {
+				    char rescAltDebugMsg[OSD_FORMAT_MESSAGE_BUFFER_SIZE];
+					tfp_sprintf(rescAltDebugMsg, "AA%3d-CT%3d",  rescueState.resAltInit / 100,  rescueState.resAltCross / 100);
+					osdFormatMessage(buff, OSD_FORMAT_MESSAGE_BUFFER_SIZE, rescAltDebugMsg);
+				} else {
+					osdFormatMessage(buff, OSD_FORMAT_MESSAGE_BUFFER_SIZE, "  * * * *");
+				}
                 break;
             }
 
