@@ -1,3 +1,44 @@
+#myBF 3.61 with Custom features
+
+
+I made some customisation in the code, and for better debug also changed the flight mode name to display each phase of the rescue mode, so I can look at OSD what is the current working phase and check heading and altitude and picture.
+
+It helps a lot for understanding and tuning it.
+
+[![FPV screen showing OSD](images/osdyt1.jpg)](https://youtu.be/Oj0iBXndD3c?t=108 "FPV screen showing OSD")
+
+On the lower right above coordinates is the flight mode.
+During manual or when I quickly turn off GPS rescue to not let it "land' by itself you can see AIR text.
+Instead of RESC you will se the following flight mode short names:
+
+IDLE: "REID"
+INITIALIZE: "REIT"
+ATTAIN_ALT: "REAA"
+CROSSTRACK: "RECT"
+APPROACH: "RELA"
+LANDING: "RELD"
+COMPLETE: "RECP"
+ABORT: "REAB"
+
+The visual beeper blinks the calculater altitudes for AA (attaining altitude phase) and CT (crosstrack) phases.
+
+##  Some extra features to list:
+
+* Enabling GPS rescue for F3 FC  (ex.:SPRACINGF3 target) by disabling some functionality
+* calculating different safe crosstrack and attain altitude alts
+* not climbing to max ever altitude during this flight
+* having a fixed altitude max if above 200meters
+* does not failsafe and disarm if switching to rescue mode to close to home
+* OSD:visual beeper showing calculated altitued for stages
+* OSD:custom flight mode names for rescue phases
+
+
+Here comes original BF readme:
+
+
+
+
+
 ![Betaflight](https://raw.githubusercontent.com/wiki/betaflight/betaflight/images/betaflight/bf_logo.png)
 
 Betaflight is flight controller software (firmware) used to fly multi-rotor craft and fixed wing craft.
