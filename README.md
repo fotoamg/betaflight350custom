@@ -1,4 +1,4 @@
-#myBF 3.61 with Custom features
+# myBF 3.61 with Custom features
 
 
 I made some customisation in the code, and for better debug also changed the flight mode name to display each phase of the rescue mode, so I can look at OSD what is the current working phase and check heading and altitude and picture.
@@ -9,16 +9,16 @@ It helps a lot for understanding and tuning it.
 
 On the lower right above coordinates is the flight mode.
 During manual or when I quickly turn off GPS rescue to not let it "land' by itself you can see AIR text.
-Instead of RESC you will se the following flight mode short names:
 
-IDLE: "REID"
-INITIALIZE: "REIT"
-ATTAIN_ALT: "REAA"
-CROSSTRACK: "RECT"
-APPROACH: "RELA"
-LANDING: "RELD"
-COMPLETE: "RECP"
-ABORT: "REAB"
+Instead of RESC you will se the following flight mode short names:
+* IDLE: "REID"
+* INITIALIZE: "REIT"
+* ATTAIN_ALT: "REAA"
+* CROSSTRACK: "RECT"
+* APPROACH: "RELA"
+* LANDING: "RELD"
+* COMPLETE: "RECP"
+* ABORT: "REAB"
 
 The visual beeper blinks the calculater altitudes for AA (attaining altitude phase) and CT (crosstrack) phases.
 
