@@ -1,4 +1,4 @@
-# myBF 3.61 with Custom features
+# myBF 3.61 with Custom features (based on 3.4.0 development)
 
 
 I made some customisation in the code, and for better debug also changed the flight mode name to display each phase of the rescue mode, so I can look at OSD what is the current working phase and check heading and altitude and picture.
@@ -25,6 +25,8 @@ The visual beeper blinks the calculater altitudes for AA (attaining altitude pha
 ##  Some extra features to list:
 
 * Enabling GPS rescue for F3 FC  (ex.:SPRACINGF3 target) by disabling some functionality
+* adding NMEA fix for GSP, supports now GNGGA GNRMC and GPGGA and GPRMC too
+* adding 3.5.1 major bugfixes
 * calculating different safe crosstrack and attain altitude alts
 * not climbing to max ever altitude during this flight
 * having a fixed altitude max if above 200meters
