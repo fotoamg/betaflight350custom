@@ -35,12 +35,17 @@
 //#undef USE_TELEMETRY_LTM
 //#undef USE_SERIALRX_XBUS
 
-//#undef USE_BOARD_INFO
+#undef USE_BOARD_INFO
 #undef USE_EXTENDED_CMS_MENUS
 #undef USE_RTC_TIME
 #undef USE_RX_MSP
 #undef USE_ESC_SENSOR_INFO
 
+#define USE_PWM
+#define USE_GPS
+#define USE_GPS_NMEA
+#define USE_GPS_UBLOX
+#define USE_GPS_RESCUE
 
 #define ENABLE_DSHOT_DMAR       true
 
@@ -62,20 +67,20 @@
 #define USE_ACC_SPI_MPU6000
 #define ACC_MPU6000_ALIGN       CW0_DEG
 
-#define USE_FLASHFS
-#define USE_FLASH_M25P16
+#undef USE_FLASHFS
+#undef USE_FLASH_M25P16
 
 #define USE_VCP
 #define USE_UART1
 #define USE_UART2
 #define USE_UART3
-#define USE_SOFTSERIAL1
-#define USE_SOFTSERIAL2
+#undef USE_SOFTSERIAL1
+#undef USE_SOFTSERIAL2
 
-#define SERIAL_PORT_COUNT 6
+#define SERIAL_PORT_COUNT 4
 
-#define USE_ESCSERIAL
-#define ESCSERIAL_TIMER_TX_PIN  PA15  // (HARDARE=0,PPM)
+#undef USE_ESCSERIAL
+#undef ESCSERIAL_TIMER_TX_PIN // (HARDARE=0,PPM)
 
 #define UART1_TX_PIN            PA9
 #define UART1_RX_PIN            PA10
@@ -90,8 +95,8 @@
 #define USE_SPI_DEVICE_1 // PA4, 5, 6, 7
 #define USE_SPI_DEVICE_2 // PB12,13,14,15 on AF5
 
-#define FLASH_CS_PIN            PB12
-#define FLASH_SPI_INSTANCE      SPI2
+//#define FLASH_CS_PIN            PB12
+//#define FLASH_SPI_INSTANCE      SPI2
 
 #define MPU6000_CS_PIN          PA4
 #define MPU6000_SPI_INSTANCE    SPI1
@@ -113,13 +118,13 @@
 
 #define CURRENT_METER_SCALE_DEFAULT 275
 
-#define ENABLE_BLACKBOX_LOGGING_ON_SPIFLASH_BY_DEFAULT
+//#define ENABLE_BLACKBOX_LOGGING_ON_SPIFLASH_BY_DEFAULT
 
 #define DEFAULT_RX_FEATURE      FEATURE_RX_SERIAL
 #define SERIALRX_PROVIDER       SERIALRX_SBUS
 #define SERIALRX_UART           SERIAL_PORT_USART2
 
-#define USE_SERIAL_4WAY_BLHELI_INTERFACE
+#undef USE_SERIAL_4WAY_BLHELI_INTERFACE
 
 // IO - stm32f303cc in 48pin package
 #define TARGET_IO_PORTA         0xffff
@@ -129,3 +134,14 @@
 
 #define USABLE_TIMER_CHANNEL_COUNT 8
 #define USED_TIMERS             (TIM_N(1) | TIM_N(2) | TIM_N(3) | TIM_N(4) | TIM_N(8))
+
+#undef USE_LED_STRIP
+#undef USE_RANGEFINDER
+#undef USE_BARO
+#undef USE_MAG
+//#undef USE_VTX_COMMON
+//#undef USE_VTX_CONTROL
+//#undef USE_VTX_SMARTAUDIO
+//#undef USE_VTX_TRAMP
+
+

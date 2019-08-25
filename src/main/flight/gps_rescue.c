@@ -51,7 +51,7 @@
 
 #include "gps_rescue.h"
 
-#define GPS_RESCUE_MAX_YAW_RATE       360  // deg/sec max yaw rate
+#define GPS_RESCUE_MAX_YAW_RATE       180  // deg/sec max yaw rate
 #define GPS_RESCUE_RATE_SCALE_DEGREES 45   // Scale the commanded yaw rate when the error is less then this angle
 
 PG_REGISTER_WITH_RESET_TEMPLATE(gpsRescueConfig_t, gpsRescueConfig, PG_GPS_RESCUE, 0);
@@ -132,8 +132,8 @@ void updateGPSRescueState(void)
 		     rescueState.resAltInit = rescueState.sensor.currentAltitude + 1000;
 		}
 		rescueState.resAltCross = rescueState.resAltInit;
-		if (rescueState.resAltCross > 12000) {
-			rescueState.resAltCross = 12000;
+		if (rescueState.resAltCross > 15000) {
+			rescueState.resAltCross = 15000;
 		} else {
 		    if ((gpsRescueConfig()->initialAltitude * 100) < (rescueState.sensor.currentAltitude + 1000))
 		    rescueState.resAltCross = (gpsRescueConfig()->initialAltitude * 100) + ((rescueState.sensor.currentAltitude + 1000) - (gpsRescueConfig()->initialAltitude * 100)) / 2;
@@ -159,7 +159,7 @@ void updateGPSRescueState(void)
 		        // Get to a safe altitude at a low velocity ASAP
         if (ABS(rescueState.intent.targetAltitude - rescueState.sensor.currentAltitude) < 1000) {
             rescueState.phase = RESCUE_CROSSTRACK;
-        }
+        } //TODO: if GPs signal/module connection lost nand there is BARO check not ascending forever!!!!
 
         rescueState.intent.targetGroundspeed = 500;
         //rescueState.intent.targetAltitude = rescueState.resAltInit;
@@ -171,15 +171,27 @@ void updateGPSRescueState(void)
     case RESCUE_CROSSTRACK:
         if (rescueState.sensor.distanceToHome < gpsRescueConfig()->descentDistance) {
             rescueState.phase = RESCUE_LANDING_APPROACH;
-        }
+        } else if ((rescueState.intent.targetAltitude - rescueState.sensor.currentAltitude) > 5000) {
+            // GAMMA: should check and kick back to attain alt!!!! HERE:
+			rescueState.phase = RESCUE_ATTAIN_ALT;
 
-        // We can assume at this point that we are at or above our RTH height, so we need to try and point to home and tilt while maintaining alt
-        // Is our altitude way off?  We should probably kick back to phase RESCUE_ATTAIN_ALT
-        rescueState.intent.targetGroundspeed = gpsRescueConfig()->rescueGroundspeed;
-        rescueState.intent.targetAltitude = rescueState.resAltCross;
-        rescueState.intent.crosstrack = true;
-        rescueState.intent.minAngleDeg = 15;
-        rescueState.intent.maxAngleDeg = gpsRescueConfig()->angle;
+			rescueState.intent.targetGroundspeed = 500;
+			//rescueState.intent.targetAltitude = rescueState.resAltInit;
+			rescueState.intent.targetAltitude = rescueState.resAltCross;
+			rescueState.intent.crosstrack = true;
+			rescueState.intent.minAngleDeg = 10;
+			rescueState.intent.maxAngleDeg = 15;
+		} else {
+			// We can assume at this point that we are at or above our RTH height, so we need to try and point to home and tilt while maintaining alt
+			// Is our altitude way off?  We should probably kick back to phase RESCUE_ATTAIN_ALT
+			// GAMMA: should check and kick back to attain alt!!!!
+			rescueState.intent.targetGroundspeed = gpsRescueConfig()->rescueGroundspeed;
+			rescueState.intent.targetAltitude = rescueState.resAltCross;
+			rescueState.intent.crosstrack = true;
+			rescueState.intent.minAngleDeg = 15;
+			rescueState.intent.maxAngleDeg = gpsRescueConfig()->angle;
+			}
+        
         break;
     case RESCUE_LANDING_APPROACH:
         // We are getting close to home in the XY plane, get Z where it needs to be to move to landing phase

@@ -65,6 +65,11 @@
 
 #undef USE_LED_STRIP
 
+#if !defined(IRCSYNERGYF3)
+#define USE_BEEPER
+#define BEEPER_PIN              PC15
+#define BEEPER_INVERTED
+#endif
 
 
 #define USE_EXTI
